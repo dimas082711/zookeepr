@@ -1,4 +1,6 @@
 
+
+
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -8,6 +10,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 // parse incoming JSON data
 app.use(express.json());
+app.use(express.static('public'));//express middleware instructs the server to make certain files readily available
 
 const { animals } = require('./data/animals');
 const { json } = require('body-parser');
@@ -115,6 +118,23 @@ if (!validateAnimal(req.body)) {
     res.json(animal);
 }
 })
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
+app.get('/animals', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/animals.html'));
+});
+
+app.get('/zookeepers', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/zookeepers.html'));
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/index.html'));
+});
+
 
 
 
